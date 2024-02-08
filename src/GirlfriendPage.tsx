@@ -2,28 +2,21 @@ import { useState } from 'react';
 
 import './App.css';
 import { Card, Container, Stack, TextInput, Title } from '@mantine/core';
-import styles from './GirlfriendForm.module.css';
+import styles from './GirlfriendPage.module.css';
 import { TopNav } from './TopNav/TopNav';
 import { MainSection } from './MainSection/MainSection';
 import { Steps } from './Steps/Steps';
+import { GirlfriendForm } from './GirlfriendForm/GirlfriendForm';
 
-export const GirlfriendForm = () => {
+export const GirlfriendPage = () => {
+	const [notification, setNotification] = useState<boolean>(false);
 	return (
 		<>
-			<TopNav />
+			<TopNav notification={notification} />
 
 			<MainSection />
 			<Steps />
-			{/* <form className={styles.form}>
-					
-					<Stack>
-						<Title>Hello Pease Fill Out The Form</Title>
-						<TextInput
-							size="xs"
-							label="Name"></TextInput>
-					</Stack>
-					
-				</form> */}
+			<GirlfriendForm setNotification={setNotification} />
 		</>
 	);
 };

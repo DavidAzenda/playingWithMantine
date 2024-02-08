@@ -1,5 +1,5 @@
 .wrapper {
-	padding: 60px 300px 50px 80px;
+	padding: 130px 300px 50px 80px;
 }
 
 .title {
@@ -176,7 +176,7 @@
 }
 
 .couple {
-	z-index: 100 !important;
+	z-index: 99 !important;
 	position: absolute;
 	width: 650px;
 	height: 650px;

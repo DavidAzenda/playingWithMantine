@@ -1,4 +1,31 @@
 .wrapper {
-	/* padding: 0 80px; */
+	padding: 80px 0;
 	background-color: #ff5252;
+}
+
+.circle {
+	height: 80px;
+	width: 80px;
+	border-radius: 50%;
+	background-color: #fcd5d5;
+	font-size: 45px;
+	font-weight: 700;
+	color: black;
+	text-align: center;
+	padding-top: 5px;
+}
+
+.header {
+	font-size: 35px;
+	font-weight: 600;
+	text-transform: uppercase;
+	color: black;
+}
+
+.text {
+	font-size: 20px;
+	inline-size: 500px;
+	font-weight: 400;
+	color: #fdc0c0;
+	text-align: center;
 }

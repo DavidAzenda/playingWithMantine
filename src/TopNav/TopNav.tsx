@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { Container, Group, Burger, Title, Drawer } from '@mantine/core';
+import { Container, Group, Burger, Title, Drawer, Indicator } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './TopNav.module.css';
 
-export function TopNav() {
+interface Props {
+	notification: boolean;
+}
+
+export function TopNav({ notification }: Props) {
 	const [opened, { open, close }] = useDisclosure(false);
 
 	return (
@@ -19,13 +23,19 @@ export function TopNav() {
 					title="Authentication">
 					{/* Drawer content */}
 				</Drawer>
-
-				<Burger
-					opened={opened}
-					onClick={open}
-					size="sm"
-					style={{ paddingRight: '20px' }}
-				/>
+				<Indicator
+					inline
+					processing
+					disabled={!notification}
+					color="blue"
+					size={12}>
+					<Burger
+						opened={opened}
+						onClick={open}
+						size="sm"
+						style={{ paddingRight: '20px' }}
+					/>
+				</Indicator>
 			</Group>
 		</header>
 	);

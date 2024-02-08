@@ -6,6 +6,7 @@
 	background: linear-gradient(90deg, #ffc0cb 50%, #00ffff 50%);
 } */
 
+html,
 body {
 	height: 100%;
 }
@@ -13,8 +14,10 @@ body {
 #root {
 	--w: 400px; /* Thiclness of the line */
 	--n: 1; /* number of lines */
-	height: 100%;
-	background: linear-gradient(90deg, #0000 calc(100% - var(--w)), #ffbdbd 0);
+	/* height: 100%; */
+	height: auto !important;
+	min-height: 100%;
+	background: linear-gradient(90deg, #f8f8f8 calc(100% - var(--w)), #ffbdbd 0);
 	background-size: calc((160% - var(--n) * var(--w)) / (var(--n) + 1) + var(--w)) 100%;
 	/* transform: translate(120px, 50%); */
 }

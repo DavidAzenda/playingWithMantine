@@ -9,9 +9,3 @@
 	padding: 0 80px;
 	/* background: linear-gradient(90deg, #ffc0cb 50%, #00ffff 50%); */
 }
-
-.form {
-	position: relative;
-	background: transparent;
-	z-index: 2;
-}
