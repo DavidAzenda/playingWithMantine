@@ -1,0 +1,17 @@
+.container {
+	height: 100%;
+	padding: 0 80px;
+	/* background: linear-gradient(90deg, #ffc0cb 50%, #00ffff 50%); */
+}
+.rectangle {
+	/* width: 200px; */
+	height: 100%;
+	padding: 0 80px;
+	/* background: linear-gradient(90deg, #ffc0cb 50%, #00ffff 50%); */
+}
+
+.form {
+	position: relative;
+	background: transparent;
+	z-index: 2;
+}
