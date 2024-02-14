@@ -12,8 +12,10 @@ export const GirlfriendPage = () => {
 	const [notification, setNotification] = useState<boolean>(false);
 	return (
 		<>
-			<TopNav notification={notification} />
-
+			<TopNav
+				notification={notification}
+				setNotification={setNotification}
+			/>
 			<MainSection />
 			<Steps />
 			<GirlfriendForm setNotification={setNotification} />

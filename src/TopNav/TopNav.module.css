@@ -10,3 +10,8 @@
 	width: 100%;
 	z-index: 100;
 }
+
+.drawer {
+	height: 100% !important;
+	justify-content: center !important;
+}
