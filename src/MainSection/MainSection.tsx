@@ -10,7 +10,16 @@ import heart from '../assets/heart.png';
 import robot from '../assets/robot.png';
 import couple from '../assets/couple.png';
 
-export function MainSection() {
+interface Props {
+	scrollIntoView: (params?: ScrollIntoViewAnimation | undefined) => void;
+}
+
+interface ScrollIntoViewAnimation {
+	/** target element alignment relatively to parent based on current axis */
+	alignment?: 'start' | 'end' | 'center';
+}
+
+export function MainSection({ scrollIntoView }: Props) {
 	return (
 		<>
 			<Group
@@ -37,7 +46,8 @@ export function MainSection() {
 							bg={'#FF3232'}
 							size="lg"
 							style={{ borderColor: '#CB0000', width: '200px' }}
-							rightSection={<FiArrowRight size="24px" />}>
+							rightSection={<FiArrowRight size="24px" />}
+							onClick={() => scrollIntoView({ alignment: 'start' })}>
 							JOIN NOW
 						</Button>
 					</Stack>

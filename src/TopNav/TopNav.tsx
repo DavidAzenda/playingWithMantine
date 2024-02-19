@@ -12,6 +12,14 @@ interface Props {
 export function TopNav({ notification, setNotification }: Props) {
 	const [opened, { open, close }] = useDisclosure(false);
 
+	setNotification(
+		['welcome', 'newMatch']
+			.map((key) => JSON.parse(localStorage.getItem(key)!))
+			.filter((notification) => notification === false).length === 0
+			? false
+			: true
+	);
+
 	return (
 		<header className={classes.header}>
 			<Group justify="space-between">
@@ -25,10 +33,7 @@ export function TopNav({ notification, setNotification }: Props) {
 					position="right"
 					classNames={{ body: classes.drawer }}
 					withCloseButton={false}>
-					<UserButton
-						notification={notification}
-						setNotification={setNotification}
-					/>
+					<UserButton notification={notification} />
 				</Drawer>
 				<Indicator
 					inline

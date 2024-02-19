@@ -33,8 +33,9 @@ import { PillSearch } from '../PillSearch/PillSearch';
 
 interface Props {
 	setNotification: React.Dispatch<React.SetStateAction<boolean>>;
+	targetRef: React.MutableRefObject<HTMLDivElement>;
 }
-export function GirlfriendForm({ setNotification }: Props) {
+export function GirlfriendForm({ setNotification, targetRef }: Props) {
 	const form = useForm({
 		initialValues: {
 			// Personal Info
@@ -45,7 +46,7 @@ export function GirlfriendForm({ setNotification }: Props) {
 			dob: new Date(),
 			gender: 'Female',
 			nationality: '',
-			height: '50',
+			height: 50,
 			occupation: '',
 
 			// Deeper Info
@@ -76,10 +77,21 @@ export function GirlfriendForm({ setNotification }: Props) {
 	const [units, setUnits] = useState('ft');
 	const [pickerVisible, setPickerVisible] = useState(false);
 	const [hobbies, setHobbies] = useState<string[]>([]);
+	const [loading, setLoading] = useState(false);
+
+	function onEmailChange(val: string | null) {
+		console.log(val);
+		if (!val) return '';
+		form.setFieldValue('email', val);
+		localStorage.setItem('welcome', JSON.stringify(false));
+	}
 
 	function handleFormSubmit() {
 		console.log(form.values);
+		setLoading(true);
 		localStorage.setItem('gfInfo', JSON.stringify(form.values));
+		localStorage.setItem('newMatch', JSON.stringify(false));
+
 		const id = notifications.show({
 			loading: true,
 			title: 'Finding your match...',
@@ -90,6 +102,7 @@ export function GirlfriendForm({ setNotification }: Props) {
 
 		setTimeout(() => {
 			setNotification(true);
+			setLoading(false);
 			notifications.update({
 				id,
 				color: 'teal',
@@ -103,7 +116,9 @@ export function GirlfriendForm({ setNotification }: Props) {
 	}
 
 	return (
-		<div className={styles.wrapper}>
+		<div
+			ref={targetRef}
+			className={styles.wrapper}>
 			<form
 				onSubmit={handleFormSubmit}
 				style={{ paddingBottom: '20px' }}>
@@ -119,6 +134,7 @@ export function GirlfriendForm({ setNotification }: Props) {
 								label="Email"
 								placeholder="Email"
 								{...form.getInputProps('email')}
+								onChange={(val) => onEmailChange(val.target.value ?? '')}
 							/>
 							<DateInput
 								valueFormat="YYYY MMM DD"
@@ -155,30 +171,35 @@ export function GirlfriendForm({ setNotification }: Props) {
 								{...form.getInputProps('gender')}
 								data={['Male', 'Female']}
 							/>
-							<Text>Height</Text>
-							<Grid>
-								<Grid.Col span={10}>
-									<Slider
-										labelAlwaysOn
-										min={units === 'cm' ? 100 : 50}
-										max={units === 'cm' ? 200 : 90}
-										label={(value) =>
-											units === 'cm'
-												? `${value.toFixed(1)} cm`
-												: `${(value / 12).toFixed(1)} ft`
-										}
-										{...form.getInputProps('height')}
-									/>
-								</Grid.Col>
-								<Grid.Col span={2}>
-									<Select
-										size="xs"
-										data={['cm', 'ft']}
-										value={units}
-										onChange={(value) => setUnits(value!)}
-									/>
-								</Grid.Col>
-							</Grid>
+							<Group>
+								<Input.Wrapper
+									label="Height"
+									w={'85%'}>
+									{units !== 'cm' && (
+										<Slider
+											min={50}
+											max={90}
+											label={(value) => `${(value / 12).toFixed(1)} ft`}
+											{...form.getInputProps('height')}
+										/>
+									)}
+									{units === 'cm' && (
+										<Slider
+											min={100}
+											max={200}
+											label={(value) => `${value.toFixed(1)} cm`}
+											{...form.getInputProps('height')}
+										/>
+									)}
+								</Input.Wrapper>
+								<Select
+									w={100}
+									size="xs"
+									data={['cm', 'ft']}
+									value={units}
+									onChange={(value) => setUnits(value!)}
+								/>
+							</Group>
 						</Grid.Col>
 					</Grid>
 				</Fieldset>
@@ -348,6 +369,7 @@ export function GirlfriendForm({ setNotification }: Props) {
 				type="submit"
 				variant="filled"
 				tt={'uppercase'}
+				loading={loading}
 				onClick={handleFormSubmit}>
 				Match
 			</Button>

@@ -1,79 +1,102 @@
 import { ActionIcon, Avatar, Button, Group, Indicator, Stack, Text, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { FiChevronRight, FiLogOut, FiMail } from 'react-icons/fi';
+import { FiChevronRight, FiHeart, FiLock, FiLogOut, FiMail, FiSettings } from 'react-icons/fi';
+
+import { useDisclosure, useInterval } from '@mantine/hooks';
+import { useState, useEffect } from 'react';
+import { MessagesModal } from '../modals/MessagesModal';
+import { openMessagesModal } from '../modals.utils';
 
 interface Props {
 	notification: boolean;
-	setNotification: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function UserButton({ notification, setNotification }: Props) {
-	function openMessagesModal() {
-		return modals.openConfirmModal({
-			title: 'Please confirm your action',
-			closeOnConfirm: false,
-			labels: { confirm: 'Next modal', cancel: 'Close modal' },
-			children: (
-				<Text size="sm">
-					This action is so important that you are required to confirm it with a modal.
-					Please click one of these buttons to proceed.
-				</Text>
-			),
-			onConfirm: () => {
-				setNotification(false);
-				modals.openConfirmModal({
-					title: 'This is modal at second layer',
-					labels: { confirm: 'Close modal', cancel: 'Back' },
-					closeOnConfirm: false,
-					children: (
-						<Text size="sm">
-							When this modal is closed modals state will revert to first modal
-						</Text>
-					),
-					onConfirm: modals.closeAll,
-				});
-			},
-		});
-	}
+export function UserButton({ notification }: Props) {
+	let numOfNotifications = ['welcome', 'newMatch']
+		.map((key) => JSON.parse(localStorage.getItem(key)!))
+		.filter((notification) => notification === false).length;
+	window.addEventListener('storage', () => {
+		numOfNotifications = ['welcome', 'newMatch']
+			.map((key) => JSON.parse(localStorage.getItem(key)!))
+			.filter((notification) => notification === false).length;
+	});
 
 	return (
-		<Stack
-			py={'10px'}
-			h="100%"
-			justify="space-between">
-			<Stack>
-				<ActionIcon
-					radius="xl"
-					size="xl">
-					<Avatar
-						radius="xl"
-						color="pink">
-						M
-					</Avatar>
-				</ActionIcon>
-				<Tooltip label="Messages">
-					<Indicator
-						disabled={!notification}
-						color="red"
-						label="1"
-						offset={6}
-						size={12}>
+		<>
+			{/* <MessagesModal
+				opened={opened}
+				close={close}
+			/> */}
+			<Stack
+				py={'10px'}
+				h="100%"
+				justify="space-between">
+				<Stack>
+					<Tooltip label="Profile">
 						<ActionIcon
 							radius="xl"
 							size="xl"
-							onClick={() => openMessagesModal()}>
-							<FiMail />
+							color="pink">
+							<Avatar
+								radius="xl"
+								color="white">
+								M
+							</Avatar>
 						</ActionIcon>
-					</Indicator>
-				</Tooltip>
+					</Tooltip>
+
+					<Tooltip label="Messages">
+						<Indicator
+							disabled={!notification}
+							color={numOfNotifications !== 0 ? 'red' : '#ffc0cb'}
+							label={numOfNotifications !== 0 ? numOfNotifications : undefined}
+							offset={numOfNotifications !== 0 ? 6 : 0}
+							size={12}>
+							<ActionIcon
+								radius="xl"
+								size="xl"
+								onClick={openMessagesModal}
+								color="pink">
+								<FiMail />
+							</ActionIcon>
+						</Indicator>
+					</Tooltip>
+					<Tooltip label="Favorites">
+						<ActionIcon
+							radius="xl"
+							size="xl"
+							color="pink">
+							<FiHeart />
+						</ActionIcon>
+					</Tooltip>
+					<Tooltip label="Privacy">
+						<ActionIcon
+							radius="xl"
+							size="xl"
+							color="pink">
+							<FiLock />
+						</ActionIcon>
+					</Tooltip>
+				</Stack>
+				<Stack>
+					<Tooltip label="Settings">
+						<ActionIcon
+							radius="xl"
+							size="xl"
+							color="pink">
+							<FiSettings />
+						</ActionIcon>
+					</Tooltip>
+					<Tooltip label="Logout">
+						<ActionIcon
+							radius="xl"
+							size="xl"
+							color="pink">
+							<FiLogOut />
+						</ActionIcon>
+					</Tooltip>
+				</Stack>
 			</Stack>
-			<Tooltip label="Logout">
-				<ActionIcon
-					radius="xl"
-					size="xl">
-					<FiLogOut />
-				</ActionIcon>
-			</Tooltip>
-		</Stack>
+		</>
 	);
 }
