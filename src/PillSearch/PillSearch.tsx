@@ -3,7 +3,16 @@ import { PillsInput, Pill, Combobox, CheckIcon, Group, useCombobox } from '@mant
 import { UseFormReturnType } from '@mantine/form';
 import { FormValues } from '../GirlfriendForm/GirlfriendForm';
 
-const hobbies = ['Reading', 'Gym', 'Eating', 'Cooking', 'Walking', 'TV', 'Lounging'];
+const hobbies = [
+	'📚 Reading',
+	'🏋🏾‍♀️ Gym',
+	'🍽️ Eating',
+	'🥘 Cooking',
+	'🚶🏾‍♀️ Walking',
+	'🎬 Movies/TV',
+	'💃🏾 Dancing',
+	'🏃🏾‍♀️ Running',
+];
 
 interface Props {
 	form: UseFormReturnType<FormValues>;

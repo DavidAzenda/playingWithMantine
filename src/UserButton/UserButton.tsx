@@ -2,31 +2,49 @@ import { ActionIcon, Avatar, Button, Group, Indicator, Stack, Text, Tooltip } fr
 import { modals } from '@mantine/modals';
 import { FiChevronRight, FiHeart, FiLock, FiLogOut, FiMail, FiSettings } from 'react-icons/fi';
 
-import { useDisclosure, useInterval } from '@mantine/hooks';
+import { useDisclosure, useInterval, useSessionStorage } from '@mantine/hooks';
 import { useState, useEffect } from 'react';
 import { MessagesModal } from '../modals/MessagesModal';
 import { openMessagesModal } from '../modals.utils';
 
-interface Props {
-	notification: boolean;
-}
+export function UserButton() {
+	// let numOfNotifications = ['welcome', 'newMatch']
+	// 	.map((key) => JSON.parse(localStorage.getItem(key)!))
+	// 	.filter((notification) => notification === false).length;
+	// window.addEventListener('storage', () => {
+	// 	numOfNotifications = ['welcome', 'newMatch']
+	// 		.map((key) => JSON.parse(localStorage.getItem(key)!))
+	// 		.filter((notification) => notification === false).length;
+	// });
 
-export function UserButton({ notification }: Props) {
-	let numOfNotifications = ['welcome', 'newMatch']
-		.map((key) => JSON.parse(localStorage.getItem(key)!))
-		.filter((notification) => notification === false).length;
-	window.addEventListener('storage', () => {
-		numOfNotifications = ['welcome', 'newMatch']
-			.map((key) => JSON.parse(localStorage.getItem(key)!))
-			.filter((notification) => notification === false).length;
+	const [numOfNotifications, setNumOfNotifications] = useState(0);
+
+	const [notification, setNotification] = useSessionStorage({
+		key: 'notification',
+		defaultValue: false,
 	});
+
+	const [m1, setM1] = useSessionStorage({
+		key: 'welcome',
+		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
+	});
+
+	const [m2, setM2] = useSessionStorage({
+		key: 'newMatch',
+		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
+	});
+
+	useEffect(() => {
+		console.log(m1, m2);
+		let counter = 0;
+		if (!m1.opened) counter += 1;
+		if (!m2.opened) counter += 1;
+		console.log(counter);
+		setNumOfNotifications(counter);
+	}, [m1, m2]);
 
 	return (
 		<>
-			{/* <MessagesModal
-				opened={opened}
-				close={close}
-			/> */}
 			<Stack
 				py={'10px'}
 				h="100%"

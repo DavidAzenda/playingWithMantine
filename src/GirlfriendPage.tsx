@@ -7,27 +7,31 @@ import { TopNav } from './TopNav/TopNav';
 import { MainSection } from './MainSection/MainSection';
 import { Steps } from './Steps/Steps';
 import { GirlfriendForm } from './GirlfriendForm/GirlfriendForm';
-import { useScrollIntoView } from '@mantine/hooks';
+import { useScrollIntoView, useSessionStorage } from '@mantine/hooks';
+import { Footer } from './Footer/Footer';
 
 export const GirlfriendPage = () => {
-	const [notification, setNotification] = useState<boolean>(false);
-
 	const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
 		offset: 0,
 	});
 
+	const [yes, setYes] = useSessionStorage({
+		key: 'gf',
+		defaultValue: false,
+	});
+
 	return (
-		<>
-			<TopNav
-				notification={notification}
-				setNotification={setNotification}
-			/>
+		<div className={yes ? styles.dark : ''}>
+			<TopNav />
 			<MainSection scrollIntoView={scrollIntoView} />
 			<Steps />
-			<GirlfriendForm
-				setNotification={setNotification}
-				targetRef={targetRef}
-			/>
-		</>
+			<GirlfriendForm targetRef={targetRef} />
+			<Footer />
+			<div className={yes ? styles.firework : ''}></div>
+			<div className={yes ? styles.firework : ''}></div>
+			<div className={yes ? styles.firework : ''}></div>
+			<div className={yes ? styles.firework : ''}></div>
+			<div className={yes ? styles.firework : ''}></div>
+		</div>
 	);
 };

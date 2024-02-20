@@ -1,11 +1,12 @@
 import { Group, Modal, Stack, Title, Text, Notification, Card, ScrollArea } from '@mantine/core';
-import { useDisclosure, useInterval, useLocalStorage } from '@mantine/hooks';
-import { useEffect, useState } from 'react';
+import { useDisclosure, useInterval, useLocalStorage, useSessionStorage } from '@mantine/hooks';
+import { Children, useEffect, useState } from 'react';
 import { Message } from '../Message/Message';
 import classes from './MessagesModal.module.css';
 import { modals } from '@mantine/modals';
 import { openProfileModal } from '../modals.utils';
 import { BsChat, BsChatFill } from 'react-icons/bs';
+import dayjs from 'dayjs';
 
 interface Props {
 	opened: boolean;
@@ -13,25 +14,26 @@ interface Props {
 }
 
 export function MessagesModal() {
-	const [m1Opened, setM1Opened] = useLocalStorage({
+	const [m1Opened, setM1Opened] = useSessionStorage({
 		key: 'welcome',
-		defaultValue: false,
+		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
 	});
-	const [m2Opened, setM2Opened] = useLocalStorage({ key: 'newMatch', defaultValue: false });
+	const [m2Opened, setM2Opened] = useSessionStorage({
+		key: 'newMatch',
+		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
+	});
 
 	function handleM2Click() {
-		setM2Opened(true);
+		setM2Opened({
+			...m2Opened,
+			opened: true,
+			timeOpened: dayjs().format('YYYY-MMM-DD HH:mm'),
+		});
 		modals.closeAll();
 		openProfileModal('David');
 	}
 	return (
-		<Card
-			// opened={opened}
-			// onClose={close}
-			// withCloseButton={false}
-			// size="xl"
-			// centered
-			p={8}>
+		<Card p={8}>
 			<Modal.Header p={0}>
 				<Title
 					order={2}
@@ -53,56 +55,45 @@ export function MessagesModal() {
 					style={{
 						border: '1px solid pink',
 						borderRadius: '3px',
+						justifyContent: !m1Opened.timeCreated ? 'center' : '',
+						alignItems: !m1Opened.timeCreated ? 'center' : '',
 					}}>
-					<ScrollArea>
-						<Notification
-							onClick={
-								() => setM1Opened(true)
-								// localStorage.setItem('welcome', JSON.stringify({ opened: true }))
-							}
-							className={classes.notification}
-							color={m1Opened ? 'white' : 'pink'}
-							title="Welcome 🎉"
-							withCloseButton={false}
-							withBorder>
-							Welcome to Lovai.
-						</Notification>
-						<Notification
-							onClick={handleM2Click}
-							className={classes.notification}
-							color={m2Opened ? 'white' : 'pink'}
-							title="New Match ❤️"
-							withCloseButton={false}
-							withBorder>
-							You have a new match. Open to view!
-						</Notification>
-					</ScrollArea>
+					{m1Opened.timeCreated && m2Opened.timeCreated ? (
+						<ScrollArea>
+							<Notification
+								onClick={() =>
+									setM1Opened({
+										...m1Opened,
+										opened: true,
+										timeOpened: dayjs().format('YYYY-MMM-DD HH:mm'),
+									})
+								}
+								className={classes.notification}
+								color={m1Opened.opened ? 'white' : 'pink'}
+								title="Welcome 🎉"
+								withCloseButton={false}
+								withBorder>
+								Welcome to Luvai.
+							</Notification>
+							<Notification
+								onClick={handleM2Click}
+								className={classes.notification}
+								color={m2Opened.opened ? 'white' : 'pink'}
+								title="New Match ❤️"
+								withCloseButton={false}
+								withBorder>
+								You have a new match. Open to view!
+							</Notification>
+						</ScrollArea>
+					) : (
+						<Text
+							tt={'uppercase'}
+							size="18px">
+							No Messages
+						</Text>
+					)}
 				</Stack>
 			</div>
-
-			{/* <div style={{ height: '600px', border: '1px solid gray', borderRadius: '4px', }}>
-				<Notification
-					onClick={
-						() => setM1Opened(true)
-						// localStorage.setItem('welcome', JSON.stringify({ opened: true }))
-					}
-					className={classes.notification}
-					color={m1Opened ? 'white' : 'pink'}
-					title="Welcome"
-					withCloseButton={false}
-					withBorder>
-					Welcome to Lovai.
-				</Notification>
-				<Notification
-					onClick={handleM2Click}
-					className={classes.notification}
-					color={m2Opened ? 'white' : 'pink'}
-					title="New Match"
-					withCloseButton={false}
-					withBorder>
-					You have a new match. Open to view!
-				</Notification>
-			</div> */}
 		</Card>
 	);
 }

@@ -23,7 +23,7 @@ import {
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { isNotEmpty, useForm } from '@mantine/form';
-import { useTimeout } from '@mantine/hooks';
+import { useSessionStorage, useTimeout } from '@mantine/hooks';
 import styles from './GirlfriendForm.module.css';
 import { Calendar, DateInput, DatePickerInput, DateTimePicker } from '@mantine/dates';
 import dayjs from 'dayjs';
@@ -34,7 +34,6 @@ import { PillSearch } from '../PillSearch/PillSearch';
 import ReactFlagsSelect from 'react-flags-select';
 
 interface Props {
-	setNotification: React.Dispatch<React.SetStateAction<boolean>>;
 	targetRef: React.MutableRefObject<HTMLDivElement>;
 }
 
@@ -77,7 +76,7 @@ export interface FormValues {
 	hobbies: string[];
 }
 
-export function GirlfriendForm({ setNotification, targetRef }: Props) {
+export function GirlfriendForm({ targetRef }: Props) {
 	const form = useForm<FormValues>({
 		initialValues: {
 			// Personal Info
@@ -122,18 +121,39 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 	const [hobbies, setHobbies] = useState<string[]>([]);
 	const [loading, setLoading] = useState(false);
 
-	function onEmailChange(val: string | null) {
-		console.log(val);
-		if (!val) return '';
-		form.setFieldValue('email', val);
-		localStorage.setItem('welcome', JSON.stringify(false));
+	const [yes, setYes] = useSessionStorage({
+		key: 'gf',
+		defaultValue: false,
+	});
+
+	const [info, setInfo] = useSessionStorage({
+		key: 'gfInfo',
+		defaultValue: '',
+	});
+	const [m1, setM1] = useSessionStorage({
+		key: 'welcome',
+		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
+	});
+	const [m2, setM2] = useSessionStorage({
+		key: 'newMatch',
+		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
+	});
+
+	const [notif, setNotif] = useSessionStorage({
+		key: 'notification',
+		defaultValue: false,
+	});
+
+	function onEmailChange(val: string) {
+		form.setFieldValue('email', val ?? '');
 	}
 
 	function handleFormSubmit() {
 		console.log(form.values);
 		setLoading(true);
-		localStorage.setItem('gfInfo', JSON.stringify(form.values));
-		localStorage.setItem('newMatch', JSON.stringify(false));
+		setInfo(JSON.stringify(form.values));
+		// localStorage.setItem('gfInfo', JSON.stringify(form.values));
+		// localStorage.setItem('newMatch', JSON.stringify(false));
 
 		const id = notifications.show({
 			loading: true,
@@ -144,7 +164,9 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 		});
 
 		setTimeout(() => {
-			setNotification(true);
+			setNotif(true);
+			setM1({ ...m1, timeCreated: dayjs().format('YYYY-MMM-DD HH:mm') });
+			setM2({ ...m2, timeCreated: dayjs().format('YYYY-MMM-DD HH:mm') });
 			setLoading(false);
 			notifications.update({
 				id,
@@ -161,7 +183,7 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 	return (
 		<div
 			ref={targetRef}
-			className={styles.wrapper}>
+			className={yes ? styles.dark : styles.wrapper}>
 			<form
 				onSubmit={handleFormSubmit}
 				style={{ paddingBottom: '20px' }}>
@@ -180,7 +202,7 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 									label="Email"
 									placeholder="Email"
 									{...form.getInputProps('email')}
-									onChange={(val) => onEmailChange(val.target.value ?? '')}
+									onChange={(val) => onEmailChange(val.target.value)}
 								/>
 								<DateInput
 									valueFormat="YYYY MMM DD"
@@ -193,6 +215,7 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 										selected={form.values.nationality}
 										onSelect={(code) => form.setFieldValue('nationality', code)}
 										selectButtonClassName={styles.nationality}
+										searchable
 									/>
 								</Input.Wrapper>
 								<TextInput
@@ -216,7 +239,7 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 									label="Gender"
 									placeholder="Gender"
 									{...form.getInputProps('gender')}
-									data={['Male', 'Female']}
+									data={['👨🏾 Male', '👩🏾 Female']}
 								/>
 								<Group>
 									<Input.Wrapper
@@ -378,7 +401,7 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 									label="Interested In"
 									placeholder="Interested In"
 									{...form.getInputProps('interestedIn')}
-									data={['Men', 'Women']}
+									data={['👨🏾 Men', '👩🏾 Women']}
 								/>
 								<Radio.Group
 									name="preferredAge"
@@ -434,6 +457,7 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 											form.setFieldValue('preferredNationality', code)
 										}
 										selectButtonClassName={styles.nationality}
+										searchable
 									/>
 								</Input.Wrapper>
 								<Select
@@ -441,14 +465,14 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 									placeholder="Preferred Occupation"
 									{...form.getInputProps('preferredOccupation')}
 									data={[
-										'Actor',
-										'Athlete',
-										'Chef',
-										'Engineering',
-										'Health Care',
-										'Law',
-										'Musician',
-										'Unemployed',
+										'🎬 Actor',
+										'🥇 Athlete',
+										'👨🏾‍🍳 Chef',
+										'👨🏾‍💻 Engineering',
+										'👩🏾‍⚕️ Health Care',
+										'👩🏾‍⚖️ Law',
+										'🎼 Musician',
+										'🤡 Unemployed',
 									]}
 								/>
 							</Grid.Col>
@@ -464,9 +488,10 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 				type="submit"
 				variant="filled"
 				tt={'uppercase'}
+				disabled={yes}
 				loading={loading}
 				onClick={handleFormSubmit}>
-				Match
+				find your Match
 			</Button>
 		</div>
 	);

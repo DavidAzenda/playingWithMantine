@@ -5,8 +5,12 @@
 .read::before {
 	color: white;
 }
+.notification {
+	font-family: 'Josefin Sans Variable';
+}
 
 .notification:hover {
 	cursor: pointer;
+	font-family: 'Josefin Sans Variable';
 	background-color: rgb(254, 238, 240);
 }

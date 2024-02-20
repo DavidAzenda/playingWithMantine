@@ -1,3 +1,7 @@
+.dark {
+	padding: 20px 160px;
+	background: linear-gradient(rgba(29, 0, 0, 0.467), #ff0000a5), #123;
+}
 .wrapper {
 	padding: 20px 160px;
 	background-color: #f8f8f8;

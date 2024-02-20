@@ -1,36 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Group, Burger, Title, Drawer, Indicator } from '@mantine/core';
-import { useDisclosure, useLocalStorage } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage, useSessionStorage } from '@mantine/hooks';
 import classes from './TopNav.module.css';
 import { UserButton } from '../UserButton/UserButton';
 
-interface Props {
-	notification: boolean;
-	setNotification: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export function TopNav({ notification, setNotification }: Props) {
+export function TopNav() {
 	const [opened, { open, close }] = useDisclosure(false);
-	const [yes, setYes] = useLocalStorage({
+	const [yes, setYes] = useSessionStorage({
 		key: 'gf',
 		defaultValue: false,
 	});
-	setNotification(
-		['welcome', 'newMatch']
-			.map((key) => JSON.parse(localStorage.getItem(key)!))
-			.filter((notification) => notification === false).length === 0
-			? false
-			: true
-	);
+	const [notification, setNotification] = useSessionStorage({
+		key: 'notification',
+		defaultValue: false,
+	});
 
-	setTimeout(() => {
-		// setYes(false);
-	}, 5000);
+	const [m1, setM1] = useSessionStorage({
+		key: 'welcome',
+		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
+	});
+	const [m2, setM2] = useSessionStorage({
+		key: 'newMatch',
+		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
+	});
+
+	useEffect(() => {
+		console.log(m1.timeOpened.length === 0, m2.timeOpened.length === 0);
+		if (m1.opened && m2.opened && m1.timeOpened.length > 0 && m2.timeOpened.length > 0)
+			return setNotification(false);
+		// else return setNotification(true);
+	}, [m1, m2]);
+
+	window.onbeforeunload = () => {
+		setYes(false);
+		sessionStorage.clear();
+	};
 
 	return (
 		<header className={classes.header}>
 			<Group justify="space-between">
-				<Title>LOVAI</Title>
+				<Title>LuVAI</Title>
 				<Drawer
 					offset={8}
 					radius="md"
@@ -40,7 +49,7 @@ export function TopNav({ notification, setNotification }: Props) {
 					position="right"
 					classNames={{ body: classes.drawer }}
 					withCloseButton={false}>
-					<UserButton notification={notification} />
+					<UserButton />
 				</Drawer>
 				<Indicator
 					inline
