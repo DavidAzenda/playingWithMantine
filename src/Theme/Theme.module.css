@@ -2,6 +2,24 @@
 	padding-bottom: 12px;
 }
 
+.titleRoot {
+	font-family: 'Josefin Sans Variable';
+	color: black;
+	font-weight: 500;
+	text-transform: uppercase;
+	padding-top: 4px;
+}
+
+.inputLabel {
+	font-family: 'Josefin Sans Variable';
+	color: black;
+	text-transform: uppercase;
+	font-weight: 600 !important;
+	font-size: 11px !important;
+	letter-spacing: 0.2px;
+	padding-top: 3px;
+}
+
 .fieldSetLegend {
 	background-color: pink;
 	border: 1px solid;

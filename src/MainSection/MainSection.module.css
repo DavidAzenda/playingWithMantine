@@ -3,9 +3,10 @@
 }
 
 .title {
-	font-size: 80px;
+	font-size: 70px;
 	font-weight: 700;
 	inline-size: 600px;
+	font-family: 'Josefin Sans Variable';
 }
 
 .subHeader {

@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { PillsInput, Pill, Combobox, CheckIcon, Group, useCombobox } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
+import { FormValues } from '../GirlfriendForm/GirlfriendForm';
 
-const hobbies = ['🍎 Apples', '🍌 Bananas', '🥦 Broccoli', '🥕 Carrots', '🍫 Chocolate'];
+const hobbies = ['Reading', 'Gym', 'Eating', 'Cooking', 'Walking', 'TV', 'Lounging'];
 
 interface Props {
-	hobbiess: string[];
-	setHobbies: React.Dispatch<React.SetStateAction<string[]>>;
+	form: UseFormReturnType<FormValues>;
 }
 
-export function PillSearch({ hobbiess, setHobbies }: Props) {
+export function PillSearch({ form }: Props) {
 	const combobox = useCombobox({
 		onDropdownClose: () => combobox.resetSelectedOption(),
 		onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
@@ -21,14 +22,12 @@ export function PillSearch({ hobbiess, setHobbies }: Props) {
 		setValue((current) =>
 			current.includes(val) ? current.filter((v) => v !== val) : [...current, val]
 		);
-		setHobbies((current) =>
-			current.includes(val) ? current.filter((v) => v !== val) : [...current, val]
-		);
+		form.insertListItem('hobbies', val);
 	};
 
 	const handleValueRemove = (val: string) => {
 		setValue((current) => current.filter((v) => v !== val));
-		setHobbies((current) => current.filter((v) => v !== val));
+		form.removeListItem('hobbies', form.values.hobbies.indexOf(val));
 	};
 
 	const values = value.map((item) => (

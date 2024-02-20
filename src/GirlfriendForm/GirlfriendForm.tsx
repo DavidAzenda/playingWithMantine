@@ -4,6 +4,7 @@ import {
 	Badge,
 	Button,
 	ColorPicker,
+	ComboboxData,
 	Container,
 	Fieldset,
 	Grid,
@@ -26,17 +27,58 @@ import { useTimeout } from '@mantine/hooks';
 import styles from './GirlfriendForm.module.css';
 import { Calendar, DateInput, DatePickerInput, DateTimePicker } from '@mantine/dates';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HiEyeDropper } from 'react-icons/hi2';
 import { FiCheck } from 'react-icons/fi';
 import { PillSearch } from '../PillSearch/PillSearch';
+import ReactFlagsSelect from 'react-flags-select';
 
 interface Props {
 	setNotification: React.Dispatch<React.SetStateAction<boolean>>;
 	targetRef: React.MutableRefObject<HTMLDivElement>;
 }
+
+interface codes {
+	key: string;
+	value: string;
+}
+
+export interface FormValues {
+	// Personal Info
+	firstName: string;
+	lastName: string;
+	email: string;
+	phone: string;
+	dob: Date;
+	gender: string;
+	nationality: string;
+	height: number;
+	occupation: string;
+
+	// Deeper Info
+	favoriteColor: string;
+	shoeSize: string;
+	ringSize: string;
+	clothingSize: string;
+	favoriteMovie: string;
+	favoriteTV: string;
+	favoriteSong: string;
+	favoriteBook: string;
+	favoriteFood: string;
+
+	// Looking for
+	interestedIn: string;
+	preferredAge: string;
+	preferredHeight: string;
+	preferredNationality: string;
+	preferredOccupation: string;
+
+	// Hobbies
+	hobbies: string[];
+}
+
 export function GirlfriendForm({ setNotification, targetRef }: Props) {
-	const form = useForm({
+	const form = useForm<FormValues>({
 		initialValues: {
 			// Personal Info
 			firstName: '',
@@ -58,6 +100,7 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 			favoriteTV: '',
 			favoriteSong: '',
 			favoriteBook: '',
+			favoriteFood: '',
 
 			// Looking for
 			interestedIn: '',
@@ -122,247 +165,299 @@ export function GirlfriendForm({ setNotification, targetRef }: Props) {
 			<form
 				onSubmit={handleFormSubmit}
 				style={{ paddingBottom: '20px' }}>
-				<Fieldset legend="Personal Information">
-					<Grid grow>
-						<Grid.Col span={6}>
-							<TextInput
-								label=" First Name"
-								placeholder="First Name..."
-								{...form.getInputProps('firstName')}
-							/>
-							<TextInput
-								label="Email"
-								placeholder="Email"
-								{...form.getInputProps('email')}
-								onChange={(val) => onEmailChange(val.target.value ?? '')}
-							/>
-							<DateInput
-								valueFormat="YYYY MMM DD"
-								label="Date of Birth"
-								placeholder="Date of Birth"
-								{...form.getInputProps('dob')}
-							/>
+				<Stack gap={10}>
+					<Fieldset legend="Personal Information">
+						<Grid
+							grow
+							gutter={'xl'}>
+							<Grid.Col span={6}>
+								<TextInput
+									label=" First Name"
+									placeholder="First Name..."
+									{...form.getInputProps('firstName')}
+								/>
+								<TextInput
+									label="Email"
+									placeholder="Email"
+									{...form.getInputProps('email')}
+									onChange={(val) => onEmailChange(val.target.value ?? '')}
+								/>
+								<DateInput
+									valueFormat="YYYY MMM DD"
+									label="Date of Birth"
+									placeholder="Date of Birth"
+									{...form.getInputProps('dob')}
+								/>
+								<Input.Wrapper label="Nationality">
+									<ReactFlagsSelect
+										selected={form.values.nationality}
+										onSelect={(code) => form.setFieldValue('nationality', code)}
+										selectButtonClassName={styles.nationality}
+									/>
+								</Input.Wrapper>
+								<TextInput
+									label="Occupation"
+									placeholder="Occupation"
+									{...form.getInputProps('occupation')}
+								/>
+							</Grid.Col>
+							<Grid.Col span={6}>
+								<TextInput
+									label="Last Name"
+									placeholder="Last Name..."
+									{...form.getInputProps('lastName')}
+								/>
+								<TextInput
+									label="Phone Number"
+									placeholder="Phone Number"
+									{...form.getInputProps('phone')}
+								/>
+								<Select
+									label="Gender"
+									placeholder="Gender"
+									{...form.getInputProps('gender')}
+									data={['Male', 'Female']}
+								/>
+								<Group>
+									<Input.Wrapper
+										label="Height"
+										w={'85%'}>
+										{units !== 'cm' && (
+											<Slider
+												min={50}
+												max={90}
+												pt={15}
+												label={(value) => `${(value / 12).toFixed(1)} ft`}
+												{...form.getInputProps('height')}
+											/>
+										)}
+										{units === 'cm' && (
+											<Slider
+												min={100}
+												max={200}
+												pt={15}
+												label={(value) => `${value.toFixed(1)} cm`}
+												{...form.getInputProps('height')}
+											/>
+										)}
+									</Input.Wrapper>
+									<Select
+										w={99}
+										size="xs"
+										data={['cm', 'ft']}
+										value={units}
+										onChange={(value) => setUnits(value!)}
+									/>
+								</Group>
+							</Grid.Col>
+						</Grid>
+					</Fieldset>
+					<Fieldset legend="Background">
+						<Grid>
+							<Grid.Col span={6}>
+								<Input.Wrapper label="Favorite Color">
+									<Group>
+										<ColorPicker
+											format="hex"
+											withPicker={pickerVisible}
+											swatches={[
+												'#2e2e2e',
+												'#868e96',
+												'#fa5252',
+												'#e64980',
+												'#be4bdb',
+												'#7950f2',
+												'#4c6ef5',
+												'#228be6',
+												'#15aabf',
+												'#12b886',
+												'#40c057',
+												'#82c91e',
+												'#fab005',
+												'#fd7e14',
+											]}
+											{...form.getInputProps('favoriteColor')}
+										/>
 
-							<Select
-								label="Nationality"
-								placeholder="Nationality"
-								{...form.getInputProps('nationality')}
-							/>
-							<Select
-								label="Occupation"
-								placeholder="Occupation"
-								{...form.getInputProps('occupation')}
-							/>
-						</Grid.Col>
-						<Grid.Col span={6}>
-							<TextInput
-								label="Last Name"
-								placeholder="Last Name..."
-								{...form.getInputProps('lastName')}
-							/>
-							<TextInput
-								label="Phone Number"
-								placeholder="Phone Number"
-								{...form.getInputProps('phone')}
-							/>
-							<Select
-								label="Gender"
-								placeholder="Gender"
-								{...form.getInputProps('gender')}
-								data={['Male', 'Female']}
-							/>
-							<Group>
-								<Input.Wrapper
-									label="Height"
-									w={'85%'}>
-									{units !== 'cm' && (
-										<Slider
-											min={50}
-											max={90}
-											label={(value) => `${(value / 12).toFixed(1)} ft`}
-											{...form.getInputProps('height')}
+										<Tooltip label="Click to open color picker">
+											<div
+												onClick={() => setPickerVisible(!pickerVisible)}
+												style={{
+													height: '40px',
+													width: '40px',
+													borderRadius: '50%',
+													border: '1px solid black',
+													backgroundColor: `${form.values.favoriteColor}`,
+												}}></div>
+										</Tooltip>
+									</Group>
+								</Input.Wrapper>
+
+								<Select
+									pt={13}
+									label="Clothing Size"
+									placeholder="Clothing Size"
+									{...form.getInputProps('clothingSize')}
+									data={['xxs', 'xs', 'sm', 'md', 'lg', 'xl']}
+								/>
+								<TextInput
+									label="Favorite TV Show"
+									placeholder="Favorite TV Show"
+									{...form.getInputProps('favoriteTV')}
+								/>
+
+								<TextInput
+									label="Favorite Book"
+									placeholder="Favorite Book"
+									{...form.getInputProps('favoriteBook')}
+								/>
+							</Grid.Col>
+							<Grid.Col
+								span={6}
+								pt={0}>
+								<Select
+									label="Shoe Size"
+									placeholder="Shoe Size"
+									{...form.getInputProps('shoeSize')}
+									data={[
+										'2',
+										'3',
+										'4',
+										'5',
+										'6',
+										'7',
+										'8',
+										'9',
+										'10',
+										'11',
+										'12',
+										'13',
+									]}
+								/>
+								<Select
+									label="Ring Size"
+									placeholder="Ring Size"
+									{...form.getInputProps('ringSize')}
+									data={[
+										'2',
+										'3',
+										'4',
+										'5',
+										'6',
+										'7',
+										'8',
+										'9',
+										'10',
+										'11',
+										'12',
+										'13',
+									]}
+								/>
+								<TextInput
+									label="Favorite Movie"
+									placeholder="Favorite Movie"
+									{...form.getInputProps('favoriteMovie')}
+								/>
+								<TextInput
+									label="Favorite Song"
+									placeholder="Favorite Song"
+									{...form.getInputProps('favoriteSong')}
+								/>
+								<TextInput
+									label="Favorite Food"
+									placeholder="Favorite Food"
+									{...form.getInputProps('favoriteFood')}
+								/>
+							</Grid.Col>
+						</Grid>
+					</Fieldset>
+					<Fieldset legend="Preferences">
+						<Grid>
+							<Grid.Col span={6}>
+								<Select
+									label="Interested In"
+									placeholder="Interested In"
+									{...form.getInputProps('interestedIn')}
+									data={['Men', 'Women']}
+								/>
+								<Radio.Group
+									name="preferredAge"
+									label="Preferred Age"
+									{...form.getInputProps('preferredAge')}>
+									<Group>
+										<Radio
+											value="you"
+											label="18-22"
 										/>
-									)}
-									{units === 'cm' && (
-										<Slider
-											min={100}
-											max={200}
-											label={(value) => `${value.toFixed(1)} cm`}
-											{...form.getInputProps('height')}
+										<Radio
+											value="young"
+											label="23-25"
 										/>
-									)}
+										<Radio
+											value="me"
+											label="26-29"
+										/>
+										<Radio
+											value="old"
+											label="30+"
+										/>
+									</Group>
+								</Radio.Group>
+								<Radio.Group
+									label="Preferred Height Range"
+									{...form.getInputProps('preferredHeight')}>
+									<Group>
+										<Radio
+											value="you"
+											label="4'8-5'1"
+										/>
+										<Radio
+											value="short"
+											label="5'2-5'7"
+										/>
+										<Radio
+											value="average"
+											label="5'8-5'11"
+										/>
+										<Radio
+											value="tall"
+											label="6'+"
+										/>
+									</Group>
+								</Radio.Group>
+							</Grid.Col>
+							<Grid.Col span={6}>
+								<Input.Wrapper label="Preferred Nationality">
+									<ReactFlagsSelect
+										selected={form.values.preferredNationality}
+										onSelect={(code) =>
+											form.setFieldValue('preferredNationality', code)
+										}
+										selectButtonClassName={styles.nationality}
+									/>
 								</Input.Wrapper>
 								<Select
-									w={100}
-									size="xs"
-									data={['cm', 'ft']}
-									value={units}
-									onChange={(value) => setUnits(value!)}
-								/>
-							</Group>
-						</Grid.Col>
-					</Grid>
-				</Fieldset>
-				<Fieldset legend="Background">
-					<Grid>
-						<Grid.Col span={6}>
-							<Group>
-								<ColorPicker
-									format="hex"
-									withPicker={pickerVisible}
-									swatches={[
-										'#2e2e2e',
-										'#868e96',
-										'#fa5252',
-										'#e64980',
-										'#be4bdb',
-										'#7950f2',
-										'#4c6ef5',
-										'#228be6',
-										'#15aabf',
-										'#12b886',
-										'#40c057',
-										'#82c91e',
-										'#fab005',
-										'#fd7e14',
+									label="Preferred Occupation"
+									placeholder="Preferred Occupation"
+									{...form.getInputProps('preferredOccupation')}
+									data={[
+										'Actor',
+										'Athlete',
+										'Chef',
+										'Engineering',
+										'Health Care',
+										'Law',
+										'Musician',
+										'Unemployed',
 									]}
-									{...form.getInputProps('favoriteColor')}
 								/>
-
-								<Tooltip label="Click to open color picker">
-									<div
-										onClick={() => setPickerVisible(!pickerVisible)}
-										style={{
-											height: '40px',
-											width: '40px',
-											borderRadius: '50%',
-											border: '1px solid black',
-											backgroundColor: `${form.values.favoriteColor}`,
-										}}></div>
-								</Tooltip>
-							</Group>
-
-							<Select
-								label="Clothing Size"
-								placeholder="Clothing Size"
-								{...form.getInputProps('clothingSize')}
-							/>
-							<TextInput
-								label="Favorite TV Show"
-								placeholder="Favorite TV Show"
-								{...form.getInputProps('favoriteTV')}
-							/>
-
-							<TextInput
-								label="Favorite Book"
-								placeholder="Favorite Book"
-								{...form.getInputProps('favoriteBook')}
-							/>
-						</Grid.Col>
-						<Grid.Col
-							span={6}
-							pt={24}>
-							<TextInput
-								label="Shoe Size"
-								placeholder="Shoe Size"
-								{...form.getInputProps('shoeSize')}
-							/>
-							<TextInput
-								label="Ring Size"
-								placeholder="Ring Size"
-								{...form.getInputProps('ringSize')}
-							/>
-							<TextInput
-								label="Favorite Movie"
-								placeholder="Favorite Movie"
-								{...form.getInputProps('favoriteMovie')}
-							/>
-							<Select
-								label="Favorite Song"
-								placeholder="Favorite Song"
-								{...form.getInputProps('favoriteSong')}
-								data={['Male', 'Female']}
-							/>
-						</Grid.Col>
-					</Grid>
-				</Fieldset>
-				<Fieldset legend="Personal Information">
-					<Grid>
-						<Grid.Col span={6}>
-							<Select
-								label="Interested In"
-								placeholder="Interested In"
-								{...form.getInputProps('interestedIn')}
-								data={['Men', 'Women']}
-							/>
-							<Radio.Group
-								name="prefferedAge"
-								label="Preferred Age"
-								{...form.getInputProps('preferredAge')}>
-								<Group>
-									<Radio
-										value="you"
-										label="18-22"
-									/>
-									<Radio
-										value="young"
-										label="23-25"
-									/>
-									<Radio
-										value="me"
-										label="26-29"
-									/>
-									<Radio
-										value="old"
-										label="30+"
-									/>
-								</Group>
-							</Radio.Group>
-							<Radio.Group
-								label="Preferred Height Range"
-								{...form.getInputProps('preferredHeight')}>
-								<Group>
-									<Radio
-										value="you"
-										label="4'8-5'1"
-									/>
-									<Radio
-										value="short"
-										label="5'2-5'7"
-									/>
-									<Radio
-										value="average"
-										label="5'8-5'11"
-									/>
-									<Radio
-										value="tall"
-										label="6'+"
-									/>
-								</Group>
-							</Radio.Group>
-						</Grid.Col>
-						<Grid.Col span={6}>
-							<Select
-								label="Preferred Nationality"
-								placeholder="Preferred Nationality"
-								{...form.getInputProps('preferredNationality')}
-								data={[]}
-							/>
-							<Select
-								label="Preferred Occupation"
-								placeholder="Preferred Occupation"
-								{...form.getInputProps('preferredOccupation')}
-								data={[]}
-							/>
-						</Grid.Col>
-					</Grid>
-				</Fieldset>
-				<Fieldset legend="Hobbies">
-					<PillSearch
-						hobbiess={hobbies}
-						setHobbies={setHobbies}
-					/>
-				</Fieldset>
+							</Grid.Col>
+						</Grid>
+					</Fieldset>
+					<Fieldset legend="Hobbies">
+						<PillSearch form={form} />
+					</Fieldset>
+				</Stack>
 			</form>
 			<Button
 				color="red"

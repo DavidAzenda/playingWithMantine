@@ -26,17 +26,18 @@ export function MessagesModal() {
 	}
 	return (
 		<Card
-		// opened={opened}
-		// onClose={close}
-		// withCloseButton={false}
-		// size="xl"
-		// centered
-		>
+			// opened={opened}
+			// onClose={close}
+			// withCloseButton={false}
+			// size="xl"
+			// centered
+			p={8}>
 			<Modal.Header p={0}>
 				<Title
 					order={2}
 					fw={600}
-					pr={4}>
+					pr={4}
+					pt={9}>
 					Messages
 				</Title>
 				<BsChatFill
@@ -61,7 +62,7 @@ export function MessagesModal() {
 							}
 							className={classes.notification}
 							color={m1Opened ? 'white' : 'pink'}
-							title="Welcome!"
+							title="Welcome 🎉"
 							withCloseButton={false}
 							withBorder>
 							Welcome to Lovai.
@@ -70,7 +71,7 @@ export function MessagesModal() {
 							onClick={handleM2Click}
 							className={classes.notification}
 							color={m2Opened ? 'white' : 'pink'}
-							title="New Match!"
+							title="New Match ❤️"
 							withCloseButton={false}
 							withBorder>
 							You have a new match. Open to view!

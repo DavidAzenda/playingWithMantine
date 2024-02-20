@@ -10,10 +10,11 @@ import { MantineProvider } from '@mantine/core';
 import { theme } from './Theme/Theme.ts';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
+import '@fontsource-variable/josefin-sans';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-		<MantineProvider>
+		<MantineProvider theme={theme}>
 			<Notifications />
 			<ModalsProvider>
 				<GirlfriendPage />

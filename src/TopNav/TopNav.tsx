@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Container, Group, Burger, Title, Drawer, Indicator } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import classes from './TopNav.module.css';
 import { UserButton } from '../UserButton/UserButton';
 
@@ -11,7 +11,10 @@ interface Props {
 
 export function TopNav({ notification, setNotification }: Props) {
 	const [opened, { open, close }] = useDisclosure(false);
-
+	const [yes, setYes] = useLocalStorage({
+		key: 'gf',
+		defaultValue: false,
+	});
 	setNotification(
 		['welcome', 'newMatch']
 			.map((key) => JSON.parse(localStorage.getItem(key)!))
@@ -19,6 +22,10 @@ export function TopNav({ notification, setNotification }: Props) {
 			? false
 			: true
 	);
+
+	setTimeout(() => {
+		// setYes(false);
+	}, 5000);
 
 	return (
 		<header className={classes.header}>
@@ -28,7 +35,7 @@ export function TopNav({ notification, setNotification }: Props) {
 					offset={8}
 					radius="md"
 					size={'80px'}
-					opened={opened}
+					opened={yes ? false : opened}
 					onClose={close}
 					position="right"
 					classNames={{ body: classes.drawer }}
@@ -42,7 +49,7 @@ export function TopNav({ notification, setNotification }: Props) {
 					color="blue"
 					size={12}>
 					<Burger
-						opened={opened}
+						opened={yes ? false : opened}
 						onClick={open}
 						size="sm"
 						style={{ paddingRight: '20px' }}
