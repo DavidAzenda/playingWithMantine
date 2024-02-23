@@ -2,20 +2,16 @@ import { ActionIcon, Avatar, Button, Group, Indicator, Stack, Text, Tooltip } fr
 import { modals } from '@mantine/modals';
 import { FiChevronRight, FiHeart, FiLock, FiLogOut, FiMail, FiSettings } from 'react-icons/fi';
 
-import { useDisclosure, useInterval, useSessionStorage } from '@mantine/hooks';
+import { useDisclosure, useInterval, useLocalStorage, useSessionStorage } from '@mantine/hooks';
 import { useState, useEffect } from 'react';
 import { MessagesModal } from '../modals/MessagesModal';
 import { openMessagesModal } from '../modals.utils';
 
 export function UserButton() {
-	// let numOfNotifications = ['welcome', 'newMatch']
-	// 	.map((key) => JSON.parse(localStorage.getItem(key)!))
-	// 	.filter((notification) => notification === false).length;
-	// window.addEventListener('storage', () => {
-	// 	numOfNotifications = ['welcome', 'newMatch']
-	// 		.map((key) => JSON.parse(localStorage.getItem(key)!))
-	// 		.filter((notification) => notification === false).length;
-	// });
+	const [login, setlogin, clearLogin] = useLocalStorage({
+		key: 'login',
+		defaultValue: false,
+	});
 
 	const [numOfNotifications, setNumOfNotifications] = useState(0);
 
@@ -42,6 +38,10 @@ export function UserButton() {
 		console.log(counter);
 		setNumOfNotifications(counter);
 	}, [m1, m2]);
+
+	function handleLogout() {
+		clearLogin();
+	}
 
 	return (
 		<>
@@ -109,7 +109,8 @@ export function UserButton() {
 						<ActionIcon
 							radius="xl"
 							size="xl"
-							color="pink">
+							color="pink"
+							onClick={handleLogout}>
 							<FiLogOut />
 						</ActionIcon>
 					</Tooltip>

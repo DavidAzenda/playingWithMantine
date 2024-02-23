@@ -23,7 +23,7 @@ import {
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { isNotEmpty, useForm } from '@mantine/form';
-import { useSessionStorage, useTimeout } from '@mantine/hooks';
+import { useLocalStorage, useSessionStorage, useTimeout } from '@mantine/hooks';
 import styles from './GirlfriendForm.module.css';
 import { Calendar, DateInput, DatePickerInput, DateTimePicker } from '@mantine/dates';
 import dayjs from 'dayjs';
@@ -126,7 +126,7 @@ export function GirlfriendForm({ targetRef }: Props) {
 		defaultValue: false,
 	});
 
-	const [info, setInfo] = useSessionStorage({
+	const [info, setInfo] = useLocalStorage({
 		key: 'gfInfo',
 		defaultValue: '',
 	});
