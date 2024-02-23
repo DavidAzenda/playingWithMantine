@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Container, Group, Burger, Title, Drawer, Indicator } from '@mantine/core';
-import { useDisclosure, useLocalStorage, useSessionStorage } from '@mantine/hooks';
+import { useEffect } from 'react';
+import { Group, Burger, Title, Drawer, Indicator } from '@mantine/core';
+import { useDisclosure, useSessionStorage } from '@mantine/hooks';
 import classes from './TopNav.module.css';
 import { UserButton } from '../UserButton/UserButton';
 
@@ -15,11 +15,11 @@ export function TopNav() {
 		defaultValue: false,
 	});
 
-	const [m1, setM1] = useSessionStorage({
+	const [m1] = useSessionStorage({
 		key: 'welcome',
 		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
 	});
-	const [m2, setM2] = useSessionStorage({
+	const [m2] = useSessionStorage({
 		key: 'newMatch',
 		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
 	});

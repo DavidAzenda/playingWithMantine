@@ -1,4 +1,4 @@
-import { Anchor, Container, Group, Title } from '@mantine/core';
+import { Anchor, Group, Title } from '@mantine/core';
 import classes from './Footer.module.css';
 
 const links = [

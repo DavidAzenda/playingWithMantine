@@ -18,11 +18,11 @@ interface Props {
 	clear: () => void;
 }
 export function Login({ clear }: Props) {
-	const [login, setlogin] = useLocalStorage({
+	const [__login, setlogin] = useLocalStorage({
 		key: 'login',
 		defaultValue: false,
 	});
-	const [slogin, setSlogin] = useSessionStorage({
+	const [__slogin, setSlogin] = useSessionStorage({
 		key: 'slogin',
 		defaultValue: false,
 	});

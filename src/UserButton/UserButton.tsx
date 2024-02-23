@@ -1,31 +1,31 @@
-import { ActionIcon, Avatar, Button, Group, Indicator, Stack, Text, Tooltip } from '@mantine/core';
-import { modals } from '@mantine/modals';
-import { FiChevronRight, FiHeart, FiLock, FiLogOut, FiMail, FiSettings } from 'react-icons/fi';
+import { ActionIcon, Avatar, Indicator, Stack, Tooltip } from '@mantine/core';
 
-import { useDisclosure, useInterval, useLocalStorage, useSessionStorage } from '@mantine/hooks';
+import { FiHeart, FiLock, FiLogOut, FiMail, FiSettings } from 'react-icons/fi';
+
+import { useLocalStorage, useSessionStorage } from '@mantine/hooks';
 import { useState, useEffect } from 'react';
-import { MessagesModal } from '../modals/MessagesModal';
+
 import { openMessagesModal } from '../modals.utils';
 
 export function UserButton() {
-	const [login, setlogin, clearLogin] = useLocalStorage({
+	const [__login, __setlogin, clearLogin] = useLocalStorage({
 		key: 'login',
 		defaultValue: false,
 	});
 
 	const [numOfNotifications, setNumOfNotifications] = useState(0);
 
-	const [notification, setNotification] = useSessionStorage({
+	const [notification] = useSessionStorage({
 		key: 'notification',
 		defaultValue: false,
 	});
 
-	const [m1, setM1] = useSessionStorage({
+	const [m1] = useSessionStorage({
 		key: 'welcome',
 		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
 	});
 
-	const [m2, setM2] = useSessionStorage({
+	const [m2] = useSessionStorage({
 		key: 'newMatch',
 		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
 	});

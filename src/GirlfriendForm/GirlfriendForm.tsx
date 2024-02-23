@@ -1,45 +1,31 @@
 import {
-	ActionIcon,
-	Autocomplete,
-	Badge,
 	Button,
 	ColorPicker,
-	ComboboxData,
-	Container,
 	Fieldset,
 	Grid,
 	Group,
 	Input,
-	InputBase,
-	Pill,
 	Radio,
 	Select,
 	Slider,
 	Stack,
-	Text,
 	TextInput,
-	Textarea,
 	Tooltip,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { isNotEmpty, useForm } from '@mantine/form';
-import { useLocalStorage, useSessionStorage, useTimeout } from '@mantine/hooks';
+import { useLocalStorage, useSessionStorage } from '@mantine/hooks';
 import styles from './GirlfriendForm.module.css';
-import { Calendar, DateInput, DatePickerInput, DateTimePicker } from '@mantine/dates';
+import { DateInput } from '@mantine/dates';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
-import { HiEyeDropper } from 'react-icons/hi2';
+import { useState } from 'react';
+
 import { FiCheck } from 'react-icons/fi';
 import { PillSearch } from '../PillSearch/PillSearch';
 import ReactFlagsSelect from 'react-flags-select';
 
 interface Props {
 	targetRef: React.MutableRefObject<HTMLDivElement>;
-}
-
-interface codes {
-	key: string;
-	value: string;
 }
 
 export interface FormValues {
@@ -118,15 +104,15 @@ export function GirlfriendForm({ targetRef }: Props) {
 
 	const [units, setUnits] = useState('ft');
 	const [pickerVisible, setPickerVisible] = useState(false);
-	const [hobbies, setHobbies] = useState<string[]>([]);
+
 	const [loading, setLoading] = useState(false);
 
-	const [yes, setYes] = useSessionStorage({
+	const [yes] = useSessionStorage({
 		key: 'gf',
 		defaultValue: false,
 	});
 
-	const [info, setInfo] = useLocalStorage({
+	const [__info, setInfo] = useLocalStorage({
 		key: 'gfInfo',
 		defaultValue: '',
 	});
@@ -139,7 +125,7 @@ export function GirlfriendForm({ targetRef }: Props) {
 		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
 	});
 
-	const [notif, setNotif] = useSessionStorage({
+	const [__notif, setNotif] = useSessionStorage({
 		key: 'notification',
 		defaultValue: false,
 	});

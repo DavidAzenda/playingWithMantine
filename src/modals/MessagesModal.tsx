@@ -1,17 +1,11 @@
-import { Group, Modal, Stack, Title, Text, Notification, Card, ScrollArea } from '@mantine/core';
-import { useDisclosure, useInterval, useLocalStorage, useSessionStorage } from '@mantine/hooks';
-import { Children, useEffect, useState } from 'react';
-import { Message } from '../Message/Message';
+import { Modal, Stack, Title, Text, Notification, Card, ScrollArea } from '@mantine/core';
+import { useSessionStorage } from '@mantine/hooks';
+
 import classes from './MessagesModal.module.css';
 import { modals } from '@mantine/modals';
 import { openProfileModal } from '../modals.utils';
-import { BsChat, BsChatFill } from 'react-icons/bs';
+import { BsChatFill } from 'react-icons/bs';
 import dayjs from 'dayjs';
-
-interface Props {
-	opened: boolean;
-	close: () => void;
-}
 
 export function MessagesModal() {
 	const [m1Opened, setM1Opened] = useSessionStorage({

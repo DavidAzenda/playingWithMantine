@@ -1,4 +1,4 @@
-import { Group, Stack, Title, Text, Button } from '@mantine/core';
+import { Group, Stack, Button } from '@mantine/core';
 import { FaHeart } from 'react-icons/fa';
 import { FiArrowRight } from 'react-icons/fi';
 import styles from './MainSection.module.css';

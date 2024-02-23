@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import './App.css';
-import { Card, Container, LoadingOverlay, Stack, TextInput, Title } from '@mantine/core';
+import { LoadingOverlay } from '@mantine/core';
 import styles from './GirlfriendPage.module.css';
 import { TopNav } from './TopNav/TopNav';
 import { MainSection } from './MainSection/MainSection';
@@ -16,12 +16,12 @@ export const GirlfriendPage = () => {
 		offset: 0,
 	});
 
-	const [yes, setYes] = useSessionStorage({
+	const [yes] = useSessionStorage({
 		key: 'gf',
 		defaultValue: false,
 	});
 
-	const [login, setlogin] = useLocalStorage({
+	const [login] = useLocalStorage({
 		key: 'login',
 		defaultValue: false,
 	});

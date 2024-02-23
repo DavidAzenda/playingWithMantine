@@ -10,9 +10,8 @@ import {
 	Stack,
 	Avatar,
 } from '@mantine/core';
-import { openMessagesModal } from '../modals.utils';
 import { modals } from '@mantine/modals';
-import { useLocalStorage, useSessionStorage, useWindowScroll } from '@mantine/hooks';
+import { useSessionStorage, useWindowScroll } from '@mantine/hooks';
 import me from '../assets/me.jpeg';
 import { FiCornerUpLeft } from 'react-icons/fi';
 
@@ -21,17 +20,17 @@ interface Props {
 }
 
 export function ProfileModal({ name }: Props) {
-	const [yes, setYes] = useSessionStorage({
+	const [__yes, setYes] = useSessionStorage({
 		key: 'gf',
 		defaultValue: false,
 	});
 
-	const [m2Opened, setM2Opened] = useSessionStorage({
+	const [m2Opened] = useSessionStorage({
 		key: 'newMatch',
 		defaultValue: { opened: false, timeCreated: '', timeOpened: '' },
 	});
 
-	const [scroll, scrollTo] = useWindowScroll();
+	const [__scroll, scrollTo] = useWindowScroll();
 
 	function handleYes() {
 		modals.closeAll();
