@@ -31,9 +31,7 @@ export const GirlfriendPage = () => {
 	const { start, clear } = useTimeout(() => setLoading(false), 1000);
 
 	useEffect(() => {
-		console.log('before set');
 		start();
-		console.log('after set');
 	}, []);
 
 	return (
